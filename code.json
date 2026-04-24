@@ -153,6 +153,27 @@
             "<a class=\"glossary-term\" data-term=\"Function\">函数</a>定义行末尾必须有冒号"
           ],
           "related_terms": ["Function", "Parameter", "Return Value"]
+        },
+        {
+          "id": "python_while",
+          "name": "while 循环",
+          "description": "条件循环，当条件为真时重复执行代码块",
+          "search_keywords": ["循环", "while", "条件循环", "重复执行", "循环语句", "无限循环"],
+          "technical_explanation": "while <a class=\"glossary-term\" data-term=\"Loop\">循环</a>是 Python 中的一种控制结构，用于在条件表达式为 true 时重复执行一段代码块。与 for <a class=\"glossary-term\" data-term=\"Loop\">循环</a>不同，while <a class=\"glossary-term\" data-term=\"Loop\">循环</a>适用于不确定迭代次数的场景。",
+          "metaphor_explanation": "你可以把 while <a class=\"glossary-term\" data-term=\"Loop\">循环</a>想象成一个等待信号灯的司机。司机不断检查信号灯（检查条件），只要红灯亮着（条件为 true），就继续等待（执行循环体）。只有当绿灯亮起（条件变为 false）时，司机才会继续前进（退出循环）。",
+          "examples": [
+            { "title": "基本 while 循环", "code": "count = 0\nwhile count < 5:\n    print(f\"当前计数: {count}\")\n    count += 1\n# 输出:\n# 当前计数: 0\n# 当前计数: 1\n# 当前计数: 2\n# 当前计数: 3\n# 当前计数: 4" },
+            { "title": "while-else 循环", "code": "count = 0\nwhile count < 3:\n    print(f\"计数: {count}\")\n    count += 1\nelse:\n    print(\"循环正常结束\")\n# 输出:\n# 计数: 0\n# 计数: 1\n# 计数: 2\n# 循环正常结束" }
+          ],
+          "syntax_notes": [
+            "while 关键字后面必须跟条件表达式和冒号",
+            "<a class=\"glossary-term\" data-term=\"Loop\">循环</a>体必须缩进（通常4个空格）",
+            "如果条件始终为 true，会形成无限<a class=\"glossary-term\" data-term=\"Loop\">循环</a>",
+            "可以使用 break 语句提前退出<a class=\"glossary-term\" data-term=\"Loop\">循环</a>",
+            "while <a class=\"glossary-term\" data-term=\"Loop\">循环</a>可以搭配 else 子句，当<a class=\"glossary-term\" data-term=\"Loop\">循环</a>正常结束时执行",
+            "使用 while <a class=\"glossary-term\" data-term=\"Loop\">循环</a>时要注意避免无限循环"
+          ],
+          "related_terms": ["Loop", "Variable", "Operator"]
         }
       ]
     },
@@ -239,6 +260,28 @@
             "<a class=\"glossary-term\" data-term=\"Class\">类</a>体必须放在大括号中，末尾必须有分号"
           ],
           "related_terms": ["Class", "Method", "Function"]
+        },
+        {
+          "id": "cpp_while",
+          "name": "while 循环",
+          "description": "条件循环，当条件为真时重复执行代码块",
+          "search_keywords": ["循环", "while", "条件循环", "重复执行", "循环语句", "无限循环", "do while"],
+          "technical_explanation": "while <a class=\"glossary-term\" data-term=\"Loop\">循环</a>是 C++ 中的一种控制结构，用于在条件表达式为 true 时重复执行一段代码块。C++ 还提供了 do-while <a class=\"glossary-term\" data-term=\"Loop\">循环</a>，它会先执行一次<a class=\"glossary-term\" data-term=\"Loop\">循环</a>体，然后再检查条件。",
+          "metaphor_explanation": "你可以把 while <a class=\"glossary-term\" data-term=\"Loop\">循环</a>想象成一个自助洗车场。洗车前先检查是否有空位（检查条件），如果有空位就进入洗车（执行循环体）。洗完后再检查是否还需要再洗一遍（再次检查条件）。do-while <a class=\"glossary-term\" data-term=\"Loop\">循环</a>就像是必须先洗一次，然后再决定是否继续。",
+          "examples": [
+            { "title": "基本 while 循环", "code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int count = 0;\n    while (count < 5) {\n        cout << \"当前计数: \" << count << endl;\n        count++;\n    }\n    return 0;\n}\n// 输出:\n// 当前计数: 0\n// 当前计数: 1\n// 当前计数: 2\n// 当前计数: 3\n// 当前计数: 4" },
+            { "title": "do-while 循环", "code": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int count = 0;\n    do {\n        cout << \"计数: \" << count << endl;\n        count++;\n    } while (count < 3);\n    return 0;\n}\n// 输出:\n// 计数: 0\n// 计数: 1\n// 计数: 2" }
+          ],
+          "syntax_notes": [
+            "while 关键字后面必须跟条件表达式（放在圆括号中）",
+            "条件表达式必须是可转换为 bool 类型的表达式",
+            "非零值转换为 true，零值转换为 false",
+            "while <a class=\"glossary-term\" data-term=\"Loop\">循环</a>先检查条件，再执行<a class=\"glossary-term\" data-term=\"Loop\">循环</a>体",
+            "do-while <a class=\"glossary-term\" data-term=\"Loop\">循环</a>先执行<a class=\"glossary-term\" data-term=\"Loop\">循环</a>体，再检查条件（至少执行一次）",
+            "如果条件始终为 true，会形成无限<a class=\"glossary-term\" data-term=\"Loop\">循环</a>",
+            "可以使用 break 语句提前退出<a class=\"glossary-term\" data-term=\"Loop\">循环</a>"
+          ],
+          "related_terms": ["Loop", "Variable", "Operator"]
         }
       ]
     },
@@ -325,6 +368,28 @@
             "Java 中的所有代码都必须在<a class=\"glossary-term\" data-term=\"Class\">类</a>中定义"
           ],
           "related_terms": ["Class", "Method", "Function"]
+        },
+        {
+          "id": "java_while",
+          "name": "while 循环",
+          "description": "条件循环，当条件为真时重复执行代码块",
+          "search_keywords": ["循环", "while", "条件循环", "重复执行", "循环语句", "无限循环", "do while"],
+          "technical_explanation": "while <a class=\"glossary-term\" data-term=\"Loop\">循环</a>是 Java 中的一种控制结构，用于在条件表达式为 true 时重复执行一段代码块。Java 还提供了 do-while <a class=\"glossary-term\" data-term=\"Loop\">循环</a>，它会先执行一次<a class=\"glossary-term\" data-term=\"Loop\">循环</a>体，然后再检查条件表达式。",
+          "metaphor_explanation": "你可以把 while <a class=\"glossary-term\" data-term=\"Loop\">循环</a>想象成一个健身房的跑步机。跑步前先检查是否还有时间（检查条件），如果有时间就开始跑步（执行循环体）。跑完后再检查是否还有时间（再次检查条件）。do-while <a class=\"glossary-term\" data-term=\"Loop\">循环</a>就像是必须先跑一次，然后再决定是否继续跑。",
+          "examples": [
+            { "title": "基本 while 循环", "code": "public class Main {\n    public static void main(String[] args) {\n        int count = 0;\n        while (count < 5) {\n            System.out.println(\"当前计数: \" + count);\n            count++;\n        }\n    }\n}\n// 输出:\n// 当前计数: 0\n// 当前计数: 1\n// 当前计数: 2\n// 当前计数: 3\n// 当前计数: 4" },
+            { "title": "do-while 循环", "code": "public class Main {\n    public static void main(String[] args) {\n        int count = 0;\n        do {\n            System.out.println(\"计数: \" + count);\n            count++;\n        } while (count < 3);\n    }\n}\n// 输出:\n// 计数: 0\n// 计数: 1\n// 计数: 2" }
+          ],
+          "syntax_notes": [
+            "while 关键字后面必须跟条件表达式（放在圆括号中）",
+            "条件表达式必须是 boolean 类型",
+            "while <a class=\"glossary-term\" data-term=\"Loop\">循环</a>先检查条件，再执行<a class=\"glossary-term\" data-term=\"Loop\">循环</a>体",
+            "do-while <a class=\"glossary-term\" data-term=\"Loop\">循环</a>先执行<a class=\"glossary-term\" data-term=\"Loop\">循环</a>体，再检查条件（至少执行一次）",
+            "如果条件始终为 true，会形成无限<a class=\"glossary-term\" data-term=\"Loop\">循环</a>",
+            "可以使用 break 语句提前退出<a class=\"glossary-term\" data-term=\"Loop\">循环</a>",
+            "do-while <a class=\"glossary-term\" data-term=\"Loop\">循环</a>的条件表达式后面必须有分号"
+          ],
+          "related_terms": ["Loop", "Variable", "Operator"]
         }
       ]
     }
