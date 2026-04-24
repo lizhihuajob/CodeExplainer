@@ -256,22 +256,13 @@ body {
     margin-top: 4px;
 }
 
-/* Content Area Styles */
-.content-area {
-    display: flex;
-    gap: 30px;
-    min-height: 600px;
+/* Element Section Styles */
+.element-section {
+    margin-bottom: 30px;
 }
 
-.left-panel {
-    flex: 1;
-    min-width: 280px;
-    max-width: 350px;
-}
-
-.right-panel {
-    flex: 2;
-    min-width: 0;
+.detail-section {
+    width: 100%;
 }
 
 .section-title {
@@ -284,67 +275,93 @@ body {
     display: inline-block;
 }
 
-/* Element List Styles */
-.element-list {
-    background-color: var(--surface-color);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    box-shadow: var(--shadow-sm);
-    max-height: 550px;
-    overflow-y: auto;
+/* Element Grid Styles */
+.element-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
 }
 
 .element-item {
-    padding: 14px 20px;
-    border-bottom: 1px solid var(--border-color);
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
     cursor: pointer;
     transition: all var(--transition-normal);
     position: relative;
     overflow: hidden;
-}
-
-.element-item:last-child {
-    border-bottom: none;
-    border-radius: 0 0 12px 12px;
+    box-shadow: var(--shadow-sm);
 }
 
 .element-item::before {
     content: '';
     position: absolute;
     top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.1), transparent);
-    transition: left 0.6s ease;
+    left: 0;
+    right: 0;
+    height: 0;
+    background: linear-gradient(180deg, rgba(37, 99, 235, 0.08), transparent);
+    transition: height var(--transition-normal);
+}
+
+.element-item::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 0;
+    background: linear-gradient(180deg, transparent, rgba(37, 99, 235, 0.05));
+    transition: height var(--transition-normal);
 }
 
 .element-item:hover::before {
-    left: 100%;
+    height: 100%;
+}
+
+.element-item:hover::after {
+    height: 50%;
 }
 
 .element-item:hover {
-    background-color: rgba(37, 99, 235, 0.05);
-    padding-left: 28px;
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-color);
 }
 
 .element-item.active {
-    background-color: rgba(37, 99, 235, 0.1);
-    border-left: 3px solid var(--primary-color);
-    padding-left: 25px;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(37, 99, 235, 0.02) 100%);
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-md);
+}
+
+.element-item.active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: var(--primary-color);
+    border-radius: 12px 0 0 12px;
 }
 
 .element-item .element-name {
     font-weight: 600;
     color: var(--text-primary);
-    font-size: 15px;
+    font-size: 16px;
+    margin-bottom: 8px;
+    position: relative;
+    z-index: 1;
 }
 
 .element-item .element-description {
     font-size: 13px;
     color: var(--text-secondary);
-    margin-top: 4px;
     line-height: 1.5;
+    position: relative;
+    z-index: 1;
 }
 
 /* Detail View Styles */
@@ -682,20 +699,8 @@ body {
 
 /* Responsive Design */
 @media (max-width: 1024px) {
-    .content-area {
-        flex-direction: column;
-    }
-
-    .left-panel {
-        max-width: 100%;
-    }
-
-    .right-panel {
-        width: 100%;
-    }
-
-    .element-list {
-        max-height: 300px;
+    .element-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -721,6 +726,19 @@ body {
     }
 
     #search-input {
+        font-size: 14px;
+    }
+
+    .element-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .element-item {
+        padding: 16px;
+    }
+
+    .element-item .element-name {
         font-size: 14px;
     }
 
@@ -778,16 +796,17 @@ body {
         padding: 10px 16px;
     }
 
+    .element-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
     .element-item {
-        padding: 12px 16px;
+        padding: 14px 16px;
     }
 
-    .element-item.active {
-        padding-left: 20px;
-    }
-
-    .element-item:hover {
-        padding-left: 20px;
+    .element-item .element-name {
+        font-size: 15px;
     }
 
     .glossary-content {
