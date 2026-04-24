@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeExplain - 代码解释器</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="logo">CodeExplain</h1>
+            <div class="language-tabs">
+                <button class="language-tab active" data-language="python">Python</button>
+                <button class="language-tab" data-language="cpp">C++</button>
+                <button class="language-tab" data-language="java">Java</button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="搜索代码元素，如：打印、输出、print、cout、printf..." autocomplete="off">
+                    <button class="search-button" id="search-button">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="search-results" id="search-results"></div>
+            </div>
+
+            <div class="content-area">
+                <div class="left-panel">
+                    <h2 class="section-title">代码元素</h2>
+                    <div class="element-list" id="element-list"></div>
+                </div>
+
+                <div class="right-panel">
+                    <div class="detail-view" id="detail-view">
+                        <div class="placeholder">
+                            <p>选择一个代码元素查看详细解释</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div class="glossary-modal" id="glossary-modal">
+            <div class="glossary-content">
+                <div class="glossary-header">
+                    <h3 class="glossary-title" id="glossary-title"></h3>
+                    <button class="glossary-close" id="glossary-close">&times;</button>
+                </div>
+                <div class="glossary-body" id="glossary-body"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
