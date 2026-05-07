@@ -15,8 +15,23 @@ class CodeExplainApp {
 
     async loadData() {
         try {
-            const response = await fetch('code.json');
-            this.data = await response.json();
+            const response = await fetch('/api/glossary');
+            const glossary = await response.json();
+
+            const langResponse = await fetch('/api/languages');
+            const languages = await langResponse.json();
+
+            this.data = { glossary: glossary, languages: {} };
+            for (const lang of languages) {
+                this.data.languages[lang.key] = {
+                    name: lang.name,
+                    description: lang.description,
+                    elements: lang.elements.map(e => ({
+                        ...e,
+                        id: e.element_id
+                    }))
+                };
+            }
         } catch (error) {
             console.error('Failed to load data:', error);
             this.data = {
@@ -52,7 +67,7 @@ class CodeExplainApp {
         document.addEventListener('click', (e) => {
             const searchResults = document.getElementById('search-results');
             const searchContainer = document.querySelector('.search-container');
-            
+
             if (!searchContainer.contains(e.target)) {
                 searchResults.classList.remove('active');
             }
@@ -60,7 +75,7 @@ class CodeExplainApp {
 
         const glossaryClose = document.getElementById('glossary-close');
         const glossaryModal = document.getElementById('glossary-modal');
-        
+
         glossaryClose.addEventListener('click', () => {
             glossaryModal.classList.remove('active');
         });
@@ -80,7 +95,7 @@ class CodeExplainApp {
 
     switchLanguage(language) {
         this.currentLanguage = language;
-        
+
         const languageTabs = document.querySelectorAll('.language-tab');
         languageTabs.forEach(tab => {
             if (tab.dataset.language === language) {
@@ -91,7 +106,7 @@ class CodeExplainApp {
         });
 
         this.renderElementList();
-        
+
         const detailView = document.getElementById('detail-view');
         detailView.innerHTML = `
             <div class="placeholder">
@@ -153,7 +168,7 @@ class CodeExplainApp {
         if (!element) return;
 
         const detailView = document.getElementById('detail-view');
-        
+
         detailView.innerHTML = `
             <div class="detail-header">
                 <h2 class="detail-name">${element.name}</h2>
@@ -264,28 +279,28 @@ class CodeExplainApp {
         const glossaryBody = document.getElementById('glossary-body');
 
         glossaryTitle.textContent = termName;
-        
+
         glossaryBody.innerHTML = `
             <h4>定义</h4>
             <p>${term.definition}</p>
-            
+
             ${term.characteristics && term.characteristics.length > 0 ? `
                 <h4>特点</h4>
                 <ul class="syntax-list">
                     ${term.characteristics.map(c => `<li>${c}</li>`).join('')}
                 </ul>
             ` : ''}
-            
+
             ${term.example ? `
                 <div class="glossary-example">
                     <h4>示例</h4>
                     <pre><code>${this.escapeHtml(term.example)}</code></pre>
                 </div>
             ` : ''}
-            
+
             ${term.related_concepts && term.related_concepts.length > 0 ? `
                 <h4>相关概念</h4>
-                <p>${term.related_concepts.map(concept => 
+                <p>${term.related_concepts.map(concept =>
                     `<a href="#" class="glossary-term" data-term="${concept}">${concept}</a>`
                 ).join('、')}</p>
             ` : ''}
@@ -297,7 +312,7 @@ class CodeExplainApp {
 
     initSearch() {
         const allElements = [];
-        
+
         for (const [langKey, langData] of Object.entries(this.data.languages)) {
             for (const element of langData.elements) {
                 allElements.push({
@@ -328,14 +343,14 @@ class CodeExplainApp {
 
     handleSearch(query) {
         const searchResults = document.getElementById('search-results');
-        
+
         if (!query || query.trim() === '') {
             searchResults.classList.remove('active');
             return;
         }
 
         const results = this.fuse.search(query);
-        
+
         if (results.length === 0) {
             searchResults.innerHTML = `
                 <div class="search-result-item">
