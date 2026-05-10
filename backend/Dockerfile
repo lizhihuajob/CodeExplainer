@@ -2,12 +2,10 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-COPY CodeExplainer/backend/requirements.txt .
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY CodeExplainer/backend/app/ ./app/
-COPY CodeExplainer/data/ ./data/
-COPY CodeExplainer/frontend/ ./frontend/
+COPY app/ ./app/
 
 EXPOSE 8000
 

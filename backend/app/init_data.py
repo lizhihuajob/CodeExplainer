@@ -1,6 +1,3 @@
-import json
-from pathlib import Path
-
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -13,15 +10,7 @@ async def init_db():
         await conn.run_sync(Base.metadata.create_all)
 
 
-async def load_data_from_json(json_path: str):
-    path = Path(json_path)
-    if not path.exists():
-        print(f"Data file not found: {json_path}")
-        return
-
-    with open(path, "r", encoding="utf-8") as f:
-        data = json.load(f)
-
+async def load_data_from_dict(data: dict):
     async with async_session() as session:
         existing_langs = await session.execute(select(Language))
         if existing_langs.scalars().first():

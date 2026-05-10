@@ -7,7 +7,8 @@ from fastapi.staticfiles import StaticFiles
 
 from app.config import settings
 from app.database import engine, Base
-from app.init_data import load_data_from_json
+from app.data_service import get_combined_data
+from app.init_data import load_data_from_dict
 from app.routers import languages, elements, glossary
 
 
@@ -16,9 +17,8 @@ async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
-    json_path = Path(__file__).parent.parent / "data" / "code.json"
-    if json_path.exists():
-        await load_data_from_json(str(json_path))
+    data = await get_combined_data()
+    await load_data_from_dict(data)
 
     yield
 
@@ -42,6 +42,11 @@ app.include_router(languages.router)
 app.include_router(elements.router)
 app.include_router(glossary.router)
 
-frontend_dir = Path(__file__).parent.parent / "frontend"
+frontend_dir = None
+if settings.FRONTEND_DIR:
+    frontend_dir = Path(settings.FRONTEND_DIR)
+else:
+    frontend_dir = Path(__file__).parent.parent / "frontend"
+
 if frontend_dir.exists():
     app.mount("/", StaticFiles(directory=str(frontend_dir), html=True), name="frontend")
