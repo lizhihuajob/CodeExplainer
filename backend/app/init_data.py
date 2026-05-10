@@ -1,13 +1,7 @@
 from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.database import async_session, engine, Base
+from app.database import async_session
 from app.models import Language, Element, GlossaryTerm
-
-
-async def init_db():
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
 
 
 async def load_data_from_dict(data: dict):
