@@ -690,6 +690,131 @@ DEFAULT_DATA = {
                     "related_terms": ["Module", "Class", "Method"]
                 }
             ]
+        },
+        "javascript": {
+            "name": "JavaScript",
+            "description": "JavaScript 是一种轻量级的解释型编程语言，广泛用于网页开发。",
+            "elements": [
+                {
+                    "id": "js_console_log",
+                    "name": "console.log()",
+                    "description": "输出函数，用于在浏览器控制台打印内容",
+                    "search_keywords": ["打印", "输出", "显示", "console", "log", "控制台输出", "调试"],
+                    "technical_explanation": "console.log() 是 JavaScript 中最常用的调试<a class=\"glossary-term\" data-term=\"Function\">函数</a>，用于将消息输出到浏览器控制台或 Node.js 终端。",
+                    "metaphor_explanation": "你可以把 console.log() 想象成一个日记本。当你想记录某些事情时，把内容写在日记本上，方便之后查看和调试。",
+                    "examples": [
+                        { "title": "基本输出", "code": "console.log('Hello, World!');\n// 输出: Hello, World!" },
+                        { "title": "输出多个值", "code": "const name = 'Alice';\nconst age = 25;\nconsole.log('Name:', name, 'Age:', age);\n// 输出: Name: Alice Age: 25" },
+                        { "title": "格式化输出", "code": "console.log('用户 %s 今年 %d 岁', 'Alice', 25);\n// 输出: 用户 Alice 今年 25 岁" }
+                    ],
+                    "syntax_notes": [
+                        "console.log() 是一个<a class=\"glossary-term\" data-term=\"Function\">函数</a>，必须使用圆括号调用",
+                        "可以接受任意数量的<a class=\"glossary-term\" data-term=\"Parameter\">参数</a>",
+                        "支持字符串格式化：%s 字符串，%d 数字，%o 对象",
+                        "在浏览器中，输出会显示在开发者工具的 Console 面板"
+                    ],
+                    "related_terms": ["Function", "Parameter", "String"]
+                },
+                {
+                    "id": "js_let_const",
+                    "name": "let/const 变量声明",
+                    "description": "声明变量，let 可重新赋值，const 不可重新赋值",
+                    "search_keywords": ["变量", "声明", "let", "const", "变量声明", "定义变量"],
+                    "technical_explanation": "let 和 const 是 ES6 引入的<a class=\"glossary-term\" data-term=\"Variable\">变量</a>声明方式，具有块级作用域。let 声明的变量可以重新赋值，const 声明的变量不能重新赋值。",
+                    "metaphor_explanation": "你可以把 let 想象成一个可擦写的白板，你可以擦掉旧内容写上新内容。把 const 想象成一个刻字的石碑，一旦刻好就不能改变了。",
+                    "examples": [
+                        { "title": "let 声明", "code": "let count = 0;\ncount = count + 1;\nconsole.log(count); // 输出: 1" },
+                        { "title": "const 声明", "code": "const PI = 3.14159;\nconsole.log(PI); // 输出: 3.14159\n// PI = 3.14; // 这行会报错，因为 const 不能重新赋值" },
+                        { "title": "const 对象", "code": "const person = { name: 'Alice', age: 25 };\nperson.age = 26; // 这是允许的，修改的是属性不是变量本身\nconsole.log(person.age); // 输出: 26" }
+                    ],
+                    "syntax_notes": [
+                        "let 和 const 具有块级作用域（用 {} 包裹的代码块）",
+                        "const 声明时必须初始化赋值",
+                        "const 声明的对象，其属性仍然可以修改",
+                        "优先使用 const，只有在确定需要重新赋值时才使用 let"
+                    ],
+                    "related_terms": ["Variable", "String"]
+                },
+                {
+                    "id": "js_for",
+                    "name": "for 循环",
+                    "description": "迭代循环，用于重复执行代码块指定次数",
+                    "search_keywords": ["循环", "遍历", "迭代", "for", "循环语句"],
+                    "technical_explanation": "for <a class=\"glossary-term\" data-term=\"Loop\">循环</a>是 JavaScript 中的一种控制结构，由初始化表达式、条件表达式和更新表达式组成。",
+                    "metaphor_explanation": "你可以把 for <a class=\"glossary-term\" data-term=\"Loop\">循环</a>想象成一个跑步机训练计划。你设置初始速度、训练时间和每次增加的速度，然后按计划执行。",
+                    "examples": [
+                        { "title": "基本 for 循环", "code": "for (let i = 0; i < 5; i++) {\n    console.log('当前数字:', i);\n}\n// 输出:\n// 当前数字: 0\n// 当前数字: 1\n// 当前数字: 2\n// 当前数字: 3\n// 当前数字: 4" },
+                        { "title": "for...of 循环", "code": "const fruits = ['apple', 'banana', 'cherry'];\nfor (const fruit of fruits) {\n    console.log(fruit);\n}" },
+                        { "title": "for...in 循环", "code": "const person = { name: 'Alice', age: 25 };\nfor (const key in person) {\n    console.log(key, person[key]);\n}" }
+                    ],
+                    "syntax_notes": [
+                        "for <a class=\"glossary-term\" data-term=\"Loop\">循环</a>的三个部分都是可选的，但分号必须保留",
+                        "for...of 用于遍历可迭代对象（<a class=\"glossary-term\" data-term=\"Array\">数组</a>、字符串等）",
+                        "for...in 用于遍历对象的可枚举属性",
+                        "可以使用 break 语句提前退出循环"
+                    ],
+                    "related_terms": ["Loop", "Variable", "Array"]
+                },
+                {
+                    "id": "js_if",
+                    "name": "if 语句",
+                    "description": "条件判断语句，根据条件执行不同的代码块",
+                    "search_keywords": ["条件", "判断", "如果", "if", "条件判断", "分支"],
+                    "technical_explanation": "if 语句是 JavaScript 中的条件控制结构，根据条件表达式的布尔值执行不同的代码块。",
+                    "metaphor_explanation": "你可以把 if 语句想象成一个岔路口的路标。当你到达岔路口时，根据路标指示选择不同的路径。",
+                    "examples": [
+                        { "title": "基本 if 语句", "code": "const age = 18;\nif (age >= 18) {\n    console.log('你已经成年了');\n}" },
+                        { "title": "if-else 语句", "code": "const age = 15;\nif (age >= 18) {\n    console.log('成年人');\n} else {\n    console.log('未成年人');\n}" },
+                        { "title": "if-else if-else", "code": "const score = 85;\nif (score >= 90) {\n    console.log('优秀');\n} else if (score >= 80) {\n    console.log('良好');\n} else if (score >= 60) {\n    console.log('及格');\n} else {\n    console.log('不及格');\n}" }
+                    ],
+                    "syntax_notes": [
+                        "if 后面的条件表达式必须放在圆括号中",
+                        "条件表达式的结果会被转换为布尔值",
+                        "可以使用 &&、||、! <a class=\"glossary-term\" data-term=\"Operator\">运算符</a>组合多个条件",
+                        "JavaScript 支持三元运算符 condition ? expr1 : expr2"
+                    ],
+                    "related_terms": ["Loop", "Operator", "Variable"]
+                },
+                {
+                    "id": "js_function",
+                    "name": "function 函数定义",
+                    "description": "定义可重用的代码块",
+                    "search_keywords": ["函数", "定义", "function", "创建函数", "箭头函数"],
+                    "technical_explanation": "<a class=\"glossary-term\" data-term=\"Function\">函数</a>是 JavaScript 中组织代码的基本单元，可以接受参数并返回值。有函数声明、函数表达式和箭头函数等多种定义方式。",
+                    "metaphor_explanation": "你可以把函数想象成一个加工厂。原材料（参数）进去，经过加工处理，产出成品（返回值）。",
+                    "examples": [
+                        { "title": "函数声明", "code": "function greet(name) {\n    return `Hello, ${name}!`;\n}\n\nconsole.log(greet('Alice')); // 输出: Hello, Alice!" },
+                        { "title": "函数表达式", "code": "const add = function(a, b) {\n    return a + b;\n};\n\nconsole.log(add(3, 5)); // 输出: 8" },
+                        { "title": "箭头函数", "code": "const multiply = (a, b) => a * b;\nconsole.log(multiply(4, 5)); // 输出: 20\n\nconst square = x => x * x;\nconsole.log(square(3)); // 输出: 9" }
+                    ],
+                    "syntax_notes": [
+                        "函数声明会被提升（hoisting），可以在声明前调用",
+                        "函数表达式不会被提升",
+                        "箭头函数没有自己的 this，适合回调<a class=\"glossary-term\" data-term=\"Function\">函数</a>",
+                        "使用 return 语句返回值，没有 return 则返回 undefined"
+                    ],
+                    "related_terms": ["Function", "Parameter", "Return Value"]
+                },
+                {
+                    "id": "js_while",
+                    "name": "while 循环",
+                    "description": "条件循环，当条件为真时重复执行代码块",
+                    "search_keywords": ["循环", "while", "条件循环", "重复执行", "循环语句", "无限循环", "do while"],
+                    "technical_explanation": "while <a class=\"glossary-term\" data-term=\"Loop\">循环</a>是 JavaScript 中的一种控制结构，用于在条件表达式为 true 时重复执行一段代码块。JavaScript 还提供了 do-while <a class=\"glossary-term\" data-term=\"Loop\">循环</a>。",
+                    "metaphor_explanation": "你可以把 while <a class=\"glossary-term\" data-term=\"Loop\">循环</a>想象成一个等待信号灯的司机。司机不断检查信号灯（检查条件），只要红灯亮着（条件为 true），就继续等待（执行循环体）。",
+                    "examples": [
+                        { "title": "基本 while 循环", "code": "let count = 0;\nwhile (count < 5) {\n    console.log('当前计数:', count);\n    count++;\n}" },
+                        { "title": "do-while 循环", "code": "let count = 0;\ndo {\n    console.log('计数:', count);\n    count++;\n} while (count < 3);" }
+                    ],
+                    "syntax_notes": [
+                        "while 关键字后面必须跟条件表达式（放在圆括号中）",
+                        "while <a class=\"glossary-term\" data-term=\"Loop\">循环</a>先检查条件，再执行<a class=\"glossary-term\" data-term=\"Loop\">循环</a>体",
+                        "do-while <a class=\"glossary-term\" data-term=\"Loop\">循环</a>先执行<a class=\"glossary-term\" data-term=\"Loop\">循环</a>体，再检查条件（至少执行一次）",
+                        "如果条件始终为 true，会形成无限<a class=\"glossary-term\" data-term=\"Loop\">循环</a>"
+                    ],
+                    "related_terms": ["Loop", "Variable", "Operator"]
+                }
+            ]
         }
     }
 }

@@ -3,43 +3,81 @@ class CodeExplainApp {
         this.data = null;
         this.currentLanguage = 'python';
         this.fuse = null;
+        this.debounceTimer = null;
         this.init();
     }
 
     async init() {
+        this.setupNotificationListeners();
         await this.loadData();
         this.setupEventListeners();
         this.renderElementList();
         this.initSearch();
     }
 
+    setupNotificationListeners() {
+        const errorClose = document.getElementById('error-close');
+        errorClose.addEventListener('click', () => {
+            this.hideErrorNotification();
+        });
+    }
+
+    showErrorNotification(message) {
+        const notification = document.getElementById('error-notification');
+        const messageElement = document.getElementById('error-message');
+        messageElement.textContent = message;
+        notification.classList.add('active');
+    }
+
+    hideErrorNotification() {
+        const notification = document.getElementById('error-notification');
+        notification.classList.remove('active');
+    }
+
     async loadData() {
         try {
             const response = await fetch('/api/glossary');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
             const glossary = await response.json();
 
-            const langResponse = await fetch('/api/languages');
+            const langResponse = await fetch('/api/languages?include_elements=false');
+            if (!langResponse.ok) {
+                throw new Error(`HTTP error! status: ${langResponse.status}`);
+            }
             const languages = await langResponse.json();
 
             this.data = { glossary: glossary, languages: {} };
-            for (const lang of languages) {
+            const elementLoadPromises = languages.map(async (lang) => {
                 this.data.languages[lang.key] = {
                     name: lang.name,
                     description: lang.description,
-                    elements: lang.elements.map(e => ({
+                    elements: []
+                };
+                return fetch(`/api/languages/${lang.key}?include_elements=true`);
+            });
+
+            const elementResponses = await Promise.all(elementLoadPromises);
+            for (const elemResponse of elementResponses) {
+                if (elemResponse.ok) {
+                    const langData = await elemResponse.json();
+                    this.data.languages[langData.key].elements = langData.elements.map(e => ({
                         ...e,
                         id: e.element_id
-                    }))
-                };
+                    }));
+                }
             }
         } catch (error) {
             console.error('Failed to load data:', error);
+            this.showErrorNotification('数据加载失败，请刷新重试');
             this.data = {
                 glossary: {},
                 languages: {
                     python: { name: 'Python', description: '', elements: [] },
                     cpp: { name: 'C++', description: '', elements: [] },
-                    java: { name: 'Java', description: '', elements: [] }
+                    java: { name: 'Java', description: '', elements: [] },
+                    javascript: { name: 'JavaScript', description: '', elements: [] }
                 }
             };
         }
@@ -55,11 +93,15 @@ class CodeExplainApp {
 
         const searchInput = document.getElementById('search-input');
         searchInput.addEventListener('input', (e) => {
-            this.handleSearch(e.target.value);
+            this.debouncedSearch(e.target.value);
         });
 
         const searchButton = document.getElementById('search-button');
         searchButton.addEventListener('click', () => {
+            if (this.debounceTimer) {
+                clearTimeout(this.debounceTimer);
+                this.debounceTimer = null;
+            }
             const searchInput = document.getElementById('search-input');
             this.handleSearch(searchInput.value);
         });
@@ -339,6 +381,15 @@ class CodeExplainApp {
         };
 
         this.fuse = new Fuse(allElements, options);
+    }
+
+    debouncedSearch(query) {
+        if (this.debounceTimer) {
+            clearTimeout(this.debounceTimer);
+        }
+        this.debounceTimer = setTimeout(() => {
+            this.handleSearch(query);
+        }, 300);
     }
 
     handleSearch(query) {

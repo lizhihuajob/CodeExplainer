@@ -30,6 +30,7 @@ class ElementResponse(BaseModel):
     examples: list[ExampleSchema]
     syntax_notes: list[str]
     related_terms: list[str]
+    glossary_terms: list[GlossaryTermResponse] = []
     language_key: str
 
     class Config:

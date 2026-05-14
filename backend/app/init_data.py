@@ -11,6 +11,7 @@ async def load_data_from_dict(data: dict):
             print("Data already exists, skipping initialization")
             return
 
+        glossary_map = {}
         for term_name, term_data in data.get("glossary", {}).items():
             glossary = GlossaryTerm(
                 term=term_name,
@@ -20,6 +21,9 @@ async def load_data_from_dict(data: dict):
                 related_concepts=term_data.get("related_concepts", []),
             )
             session.add(glossary)
+            glossary_map[term_name] = glossary
+
+        await session.flush()
 
         for lang_key, lang_data in data.get("languages", {}).items():
             language = Language(
@@ -43,6 +47,12 @@ async def load_data_from_dict(data: dict):
                     related_terms=elem_data.get("related_terms", []),
                     language_key=lang_key,
                 )
+
+                related_term_names = elem_data.get("related_terms", [])
+                for term_name in related_term_names:
+                    if term_name in glossary_map:
+                        element.glossary_terms.append(glossary_map[term_name])
+
                 session.add(element)
 
         await session.commit()

@@ -1,27 +1,42 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.database import get_db
-from app.models import Language
+from app.models import Language, Element
 from app.schemas import LanguageCreate, LanguageResponse
 
 router = APIRouter(prefix="/api/languages", tags=["languages"])
 
 
 @router.get("", response_model=list[LanguageResponse])
-async def list_languages(db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Language).options(selectinload(Language.elements)))
+async def list_languages(
+    include_elements: bool = Query(True),
+    db: AsyncSession = Depends(get_db),
+):
+    stmt = select(Language)
+    if include_elements:
+        stmt = stmt.options(
+            selectinload(Language.elements).selectinload(Element.glossary_terms)
+        )
+    result = await db.execute(stmt)
     languages = result.scalars().all()
     return languages
 
 
 @router.get("/{language_key}", response_model=LanguageResponse)
-async def get_language(language_key: str, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(
-        select(Language).where(Language.key == language_key).options(selectinload(Language.elements))
-    )
+async def get_language(
+    language_key: str,
+    include_elements: bool = Query(True),
+    db: AsyncSession = Depends(get_db),
+):
+    stmt = select(Language).where(Language.key == language_key)
+    if include_elements:
+        stmt = stmt.options(
+            selectinload(Language.elements).selectinload(Element.glossary_terms)
+        )
+    result = await db.execute(stmt)
     language = result.scalar_one_or_none()
     if not language:
         raise HTTPException(status_code=404, detail="Language not found")

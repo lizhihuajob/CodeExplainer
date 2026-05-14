@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select, or_, cast, Text
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from app.database import get_db
 from app.models import Element, Language
@@ -14,7 +15,7 @@ async def list_elements(
     language_key: str | None = Query(None, alias="language"),
     db: AsyncSession = Depends(get_db),
 ):
-    stmt = select(Element)
+    stmt = select(Element).options(selectinload(Element.glossary_terms))
     if language_key:
         stmt = stmt.where(Element.language_key == language_key)
     result = await db.execute(stmt)
@@ -23,7 +24,11 @@ async def list_elements(
 
 @router.get("/{element_id}", response_model=ElementResponse)
 async def get_element(element_id: str, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Element).where(Element.element_id == element_id))
+    result = await db.execute(
+        select(Element)
+        .options(selectinload(Element.glossary_terms))
+        .where(Element.element_id == element_id)
+    )
     element = result.scalar_one_or_none()
     if not element:
         raise HTTPException(status_code=404, detail="Element not found")
@@ -70,6 +75,8 @@ async def delete_element(element_id: str, db: AsyncSession = Depends(get_db)):
 async def search_elements(
     q: str = Query(..., min_length=1),
     language: str | None = Query(None),
+    page: int = Query(1, ge=1),
+    page_size: int = Query(10, ge=1),
     db: AsyncSession = Depends(get_db),
 ):
     stmt = select(Element, Language.name.label("language_name")).join(
@@ -86,6 +93,8 @@ async def search_elements(
             cast(Element.search_keywords, Text).ilike(pattern),
         )
     )
+    offset = (page - 1) * page_size
+    stmt = stmt.offset(offset).limit(page_size)
     result = await db.execute(stmt)
     rows = result.all()
 

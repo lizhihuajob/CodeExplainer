@@ -1,7 +1,39 @@
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, JSON
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, JSON, TypeDecorator, Table
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 
 from app.database import Base
+
+
+element_glossary_terms = Table(
+    "element_glossary_terms",
+    Base.metadata,
+    Column("element_id", Integer, ForeignKey("elements.id"), primary_key=True),
+    Column("glossary_term_id", Integer, ForeignKey("glossary_terms.id"), primary_key=True),
+)
+
+
+class ExamplesJSON(TypeDecorator):
+    impl = JSON
+    cache_ok = True
+
+    def process_bind_param(self, value, dialect):
+        if value is None:
+            return []
+        if not isinstance(value, list):
+            raise ValueError("examples must be a list")
+        for item in value:
+            if not isinstance(item, dict):
+                raise ValueError("Each example must be a dictionary")
+            if "title" not in item:
+                raise ValueError("Each example must have a 'title' key")
+            if "code" not in item:
+                raise ValueError("Each example must have a 'code' key")
+            if not isinstance(item["title"], str):
+                raise ValueError("'title' must be a string")
+            if not isinstance(item["code"], str):
+                raise ValueError("'code' must be a string")
+        return value
 
 
 class Language(Base):
@@ -25,12 +57,17 @@ class Element(Base):
     search_keywords = Column(JSON, default=list)
     technical_explanation = Column(Text, default="")
     metaphor_explanation = Column(Text, default="")
-    examples = Column(JSON, default=list)
+    examples = Column(ExamplesJSON, default=list)
     syntax_notes = Column(JSON, default=list)
     related_terms = Column(JSON, default=list)
     language_key = Column(String(50), ForeignKey("languages.key"), nullable=False)
 
     language = relationship("Language", back_populates="elements")
+    glossary_terms = relationship(
+        "GlossaryTerm",
+        secondary=element_glossary_terms,
+        back_populates="elements",
+    )
 
 
 class GlossaryTerm(Base):
@@ -42,3 +79,9 @@ class GlossaryTerm(Base):
     characteristics = Column(JSON, default=list)
     example = Column(Text, default="")
     related_concepts = Column(JSON, default=list)
+
+    elements = relationship(
+        "Element",
+        secondary=element_glossary_terms,
+        back_populates="glossary_terms",
+    )
